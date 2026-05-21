@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -324,7 +325,8 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.06);paddin
     <li><a href="#contact">Contact</a></li>
   </ul>
   <div class="nav-cta">
-    <a href="EDET_CHARLES_UKI_CV.pdf" download class="btn btn-outline" style="padding:10px 22px;font-size:.75rem;">↓ Download CV</a>
+    <button onclick="openCVPreview()" class="btn btn-outline" style="padding:10px 22px;font-size:.75rem;">👁 Preview CV</button>
+    <a href="EDET_CHARLES_UKI_CV.pdf" download="EDET_CHARLES_UKI_CV.pdf" class="btn btn-outline" style="padding:10px 22px;font-size:.75rem;">↓ Download CV</a>
     <a href="#contact" class="btn btn-gold" style="padding:10px 22px;font-size:.75rem;">Hire Me</a>
   </div>
   <div class="hamburger" onclick="openMobileMenu()"><span></span><span></span><span></span></div>
@@ -370,7 +372,8 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.06);paddin
     <p class="hero-sub">I help businesses organize data, optimize inventory systems, create professional visual designs, and build efficient reporting solutions using modern digital tools and analytics.</p>
     <div class="hero-actions">
       <a href="#portfolio" class="btn btn-gold"><span>View Portfolio</span><span>→</span></a>
-      <a href="EDET_CHARLES_UKI_CV.pdf" download class="btn btn-outline">↓ Download CV</a>
+      <button onclick="openCVPreview()" class="btn btn-outline">👁 Preview CV</button>
+      <a href="EDET_CHARLES_UKI_CV.pdf" download="EDET_CHARLES_UKI_CV.pdf" class="btn btn-outline">↓ Download CV</a>
       <a href="#contact" class="btn btn-outline">Contact Me</a>
     </div>
     <div class="hero-social">
@@ -1022,6 +1025,61 @@ function submitForm(){const btn=event.target;btn.textContent='Sending…';btn.st
 
 // SMOOTH SCROLL
 document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'})}})});
+
+// CV PREVIEW MODAL
+function openCVPreview(){
+  const url=document.getElementById('cvDownloadHidden').getAttribute('data-url')||'EDET_CHARLES_UKI_CV.pdf';
+  const ov=document.getElementById('cvPreviewOverlay');
+  const frame=document.getElementById('cvPreviewFrame');
+  frame.src=url;
+  ov.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeCVPreview(){
+  document.getElementById('cvPreviewOverlay').classList.remove('open');
+  document.getElementById('cvPreviewFrame').src='';
+  document.body.style.overflow='';
+}
 </script>
+
+<!-- CV PREVIEW MODAL -->
+<div id="cvPreviewOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,.96);backdrop-filter:blur(20px);z-index:3000;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .35s;">
+  <div style="padding:16px 24px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,10,10,.9);border-bottom:1px solid rgba(212,168,67,.15);">
+    <div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.1em;background:linear-gradient(135deg,#F0C455,#D4A843);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Edet Charles Uki — CV Preview</div>
+      <div style="font-size:.7rem;color:rgba(250,250,250,.5);letter-spacing:.08em;text-transform:uppercase;">EDET_CHARLES_UKI_CV.pdf</div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <a id="cvModalDownload" href="EDET_CHARLES_UKI_CV.pdf" download="EDET_CHARLES_UKI_CV.pdf" style="padding:9px 20px;border-radius:50px;background:linear-gradient(135deg,#F0C455,#D4A843);color:#000;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">↓ Download CV</a>
+      <button onclick="closeCVPreview()" style="padding:9px 20px;border-radius:50px;background:transparent;border:1.5px solid rgba(212,168,67,.3);color:rgba(212,168,67,0.8);font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;">✕ Close</button>
+    </div>
+  </div>
+  <iframe id="cvPreviewFrame" src="" style="flex:1;border:none;background:#fff;"></iframe>
+</div>
+<script>
+document.getElementById('cvPreviewOverlay').addEventListener('transitionend',function(){});
+// Make overlay functional
+const cvOv=document.getElementById('cvPreviewOverlay');
+const origOpen=window.openCVPreview;
+window.openCVPreview=function(){
+  cvOv.style.opacity='1';cvOv.style.pointerEvents='all';
+  const url=document.getElementById('cvDownloadHidden').getAttribute('data-url')||'EDET_CHARLES_UKI_CV.pdf';
+  document.getElementById('cvPreviewFrame').src=url;
+  document.getElementById('cvModalDownload').href=url;
+  document.body.style.overflow='hidden';
+};
+window.closeCVPreview=function(){
+  cvOv.style.opacity='0';cvOv.style.pointerEvents='none';
+  document.getElementById('cvPreviewFrame').src='';
+  document.body.style.overflow='';
+};
+</script>
+
+<!-- HIDDEN CV URL HOLDER -->
+<a id="cvDownloadHidden" data-url="EDET_CHARLES_UKI_CV.pdf" style="display:none;"></a>
+
+<!-- FLOATING ASSET MANAGER BUTTON -->
+<a href="assets-manager.html" title="Manage Portfolio Assets (Admin)" style="position:fixed;bottom:28px;right:28px;z-index:500;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#F0C455,#D4A843);display:flex;align-items:center;justify-content:center;font-size:1.3rem;box-shadow:0 0 24px rgba(212,168,67,0.4),0 8px 24px rgba(0,0,0,0.5);transition:all .3s;text-decoration:none;" onmouseover="this.style.transform='scale(1.12)';this.style.boxShadow='0 0 40px rgba(212,168,67,0.7),0 12px 32px rgba(0,0,0,0.6)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 0 24px rgba(212,168,67,0.4),0 8px 24px rgba(0,0,0,0.5)'">⚙️</a>
+
 </body>
 </html>
